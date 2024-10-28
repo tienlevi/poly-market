@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
@@ -19,7 +18,9 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/poly-market");
+        const res = await fetch(
+          "https://poly-market.onrender.com/api/poly-market"
+        );
         const data = await res.json();
         setToken(data[0]);
       } catch (error) {
@@ -30,8 +31,6 @@ export default function Home() {
     };
     fetchData();
   }, []);
-
-  console.log(token);
 
   const refreshData = () => {
     console.log("Refresh data");
@@ -100,7 +99,7 @@ export default function Home() {
           {token?.tokens.map((item: any) => (
             <div
               className="flex items-center justify-between my-2"
-              key={item.token_id}
+              key={item.tokenId}
             >
               <div className="flex">
                 <Image
