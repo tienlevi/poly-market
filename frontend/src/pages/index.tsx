@@ -16,21 +16,22 @@ export default function Home() {
   const [token, setToken] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch("http://localhost:4000/polymarket");
-      const data = await res.json();
-      setToken(data);
-    } catch (error) {
-      console.error("Failed to fetch data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("http://localhost:8080/api/poly-market");
+        const data = await res.json();
+        setToken(data[0]);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
     fetchData();
   }, []);
+
+  console.log(token);
 
   const refreshData = () => {
     console.log("Refresh data");
@@ -110,7 +111,7 @@ export default function Home() {
                   alt=""
                 />
                 <div className="ml-2">
-                  <p className="text-[20px]">{item.token_name}</p>
+                  <p className="text-[20px]">{item.tokenName}</p>
                 </div>
               </div>
               <p className="text-[24px] font-bold">{item.price[3] * 100}%</p>

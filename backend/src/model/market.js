@@ -13,6 +13,6 @@ const Market = new mongoose.Schema({
   ],
 });
 
-const MarketSchema = mongoose.model("Makets", Market);
+const MarketSchema = mongoose.model("Markets", Market);
 
 export default MarketSchema;
