@@ -1,17 +1,20 @@
 import mongoose from "mongoose";
 
-const Market = new mongoose.Schema({
-  title: { type: String, require: true },
-  tokens: [
-    {
-      tokenId: { type: String },
-      tokenName: { type: String },
-      image: { type: String },
-      outcome: { type: Boolean },
-      price: { type: [Number] },
-    },
-  ],
-});
+const Market = new mongoose.Schema(
+  {
+    title: { type: String, require: true },
+    tokens: [
+      {
+        tokenId: { type: String },
+        tokenName: { type: String },
+        image: { type: String },
+        outcome: { type: Boolean },
+        price: { type: [Number] },
+      },
+    ],
+  },
+  { timestamps: true, versionKey: false }
+);
 
 const MarketSchema = mongoose.model("Markets", Market);
 
