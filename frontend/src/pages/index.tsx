@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   LineChart,
   Line,
@@ -32,51 +32,17 @@ export default function Home() {
     fetchData();
   }, []);
 
-  const refreshData = () => {
-    console.log("Refresh data");
-  };
-
-  const checkTime = useCallback(() => {
-    const now = new Date();
-    const hours = now.getHours();
-    const minutes = now.getMinutes();
-
-    if (hours === 9 && minutes === 51) {
-      refreshData();
-    }
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(checkTime, 60000);
-    return () => clearInterval(interval);
-  }, [checkTime]);
-
   if (isLoading) {
     return <div>Loading...</div>; // Hiển thị loading khi dữ liệu đang được tải
   }
+  const month = token.tokens[0].price.map((_: any, index: number) => index + 1);
+  const data = month?.map((item: any, index: number) => ({
+    day: item,
+    donaldTrump: (token?.tokens[0]?.price[index] || 0) * 100,
+    Harris: (token?.tokens[1]?.price[index] || 0) * 100,
+  }));
 
-  const data = [
-    {
-      name: "Apr",
-      donaldTrump: token?.tokens[0]?.price[0] * 100 || 0,
-      Harris: token?.tokens[1]?.price[0] * 100 || 0,
-    },
-    {
-      name: "May",
-      donaldTrump: token?.tokens[0]?.price[1] * 100 || 0,
-      Harris: token?.tokens[1]?.price[1] * 100 || 0,
-    },
-    {
-      name: "Jun",
-      donaldTrump: token?.tokens[0]?.price[2] * 100 || 0,
-      Harris: token?.tokens[1]?.price[2] * 100 || 0,
-    },
-    {
-      name: "Jul",
-      donaldTrump: token?.tokens[0]?.price[3] * 100 || 0,
-      Harris: token?.tokens[1]?.price[3] * 100 || 0,
-    },
-  ];
+  console.log(data);
 
   return (
     <div className="p-4">
@@ -87,7 +53,7 @@ export default function Home() {
         <CartesianGrid stroke="#ccc" />
         <Tooltip />
         <Legend />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="day" />
         <YAxis />
       </LineChart>
       <div className="block mt-5">
@@ -124,7 +90,6 @@ export default function Home() {
           </p>
         </div>
       </div>
-      <button onClick={checkTime}>Check Time</button>
     </div>
   );
 }
