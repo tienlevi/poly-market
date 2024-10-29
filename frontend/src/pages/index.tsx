@@ -42,8 +42,6 @@ export default function Home() {
     Harris: (token?.tokens[1]?.price[index] || 0) * 100,
   }));
 
-  console.log(data);
-
   return (
     <div className="p-4">
       <div className="text-[23px] font-bold">{token?.title}</div>
