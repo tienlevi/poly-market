@@ -12,13 +12,6 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
       },
       body: JSON.stringify({ title: title || "TienRonaldo" }),
     });
-    const authHeader = req.headers["authorization"];
-    if (
-      !process.env.NEXT_PUBLIC_CRON_SECRET ||
-      authHeader !== `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`
-    ) {
-      return res.status(401).json({ success: false });
-    }
     const data = await response.json();
     return res.status(200).json(data);
   } catch (error) {
