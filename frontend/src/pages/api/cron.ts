@@ -9,8 +9,6 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
         Authorization: `Bearer ${process.env.NEXT_PUBLIC_CRON_SECRET}`,
       },
     });
-    console.log(process.env.NEXT_PUBLIC_CRON_SECRET);
-
     const data = await response.json();
     return res.status(200).json(data);
   } catch (error) {
