@@ -1,4 +1,5 @@
 "use client";
+import { FormattedPrice } from "@/utils/formatted";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import {
@@ -22,7 +23,7 @@ export default function Home() {
           "https://poly-market.onrender.com/api/poly-market"
         );
         const data = await res.json();
-        setToken(data[0]);
+        setToken(data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
       } finally {
@@ -33,18 +34,26 @@ export default function Home() {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>; // Hiển thị loading khi dữ liệu đang được tải
+    return <div>Loading...</div>;
   }
-  const month = token.tokens[0].price.map((_: any, index: number) => index + 1);
-  const data = month?.map((item: any, index: number) => ({
-    day: item,
-    donaldTrump: (token?.tokens[0]?.price[index] || 0) * 100,
-    Harris: (token?.tokens[1]?.price[index] || 0) * 100,
-  }));
+  const harrisPrices = token[0].price?.map((pri: any) => (pri || 0) * 100);
+  const donaldTrumpPrice = token[1].price?.map((pri: any) => (pri || 0) * 100);
+
+  const data = token[0].price.map((_: any, index: number) => {
+    const donaldTrump = donaldTrumpPrice ? donaldTrumpPrice[index] : 0;
+    const harris = harrisPrices ? harrisPrices[index] : 0;
+    return {
+      day: index + 1,
+      donaldTrump: donaldTrump,
+      Harris: harris,
+    };
+  });
 
   return (
     <div className="p-4">
-      <div className="text-[23px] font-bold">{token?.title}</div>
+      <div className="text-[23px] font-bold">
+        Presidential Election Winner 2024
+      </div>
       <LineChart width={1200} height={400} data={data} className="mt-2">
         <Line type="monotone" dataKey="donaldTrump" stroke="#ff5952" />
         <Line type="monotone" dataKey="Harris" stroke="#1652f0" />
@@ -60,10 +69,10 @@ export default function Home() {
           <h1 className="text-left text-[#828282]">Change</h1>
         </div>
         <div className="flex flex-col w-[600px]">
-          {token?.tokens.map((item: any) => (
+          {token?.map((item: any) => (
             <div
               className="flex items-center justify-between my-2"
-              key={item.tokenId}
+              key={item._id}
             >
               <div className="flex">
                 <Image
@@ -77,14 +86,16 @@ export default function Home() {
                   <p className="text-[20px]">{item.tokenName}</p>
                 </div>
               </div>
-              <p className="text-[24px] font-bold">{item.price[3] * 100}%</p>
+              <p className="text-[24px] font-bold">
+                {FormattedPrice(item.price.at(-1))}%
+              </p>
             </div>
           ))}
           <p className="text-[25px] font-bold">
-            {token?.tokens[0]?.price[3] * 100 >
-              token?.tokens[1]?.price[3] * 100 && "Donald Trump Win"}
-            {token?.tokens[0]?.price[3] * 100 <
-              token?.tokens[1]?.price[3] * 100 && "Harris Win"}
+            {token[1].price.at(-1) * 100 > token[0].price.at(-1) * 100 &&
+              "Donald Trump Win"}
+            {token[0].price.at(-1) * 100 > token[1].price.at(-1) * 100 &&
+              "Harris Win"}
           </p>
         </div>
       </div>
