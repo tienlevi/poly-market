@@ -3,7 +3,7 @@ import MarketSchema from "../model/market.js";
 
 function Schedule() {
   const task = cron.schedule(
-    "*/30 * * * *",
+    "*/60 * * * *",
     async () => {
       const donaldTrumpPrice = Math.random();
       const harrisPrice = 1 - donaldTrumpPrice;
